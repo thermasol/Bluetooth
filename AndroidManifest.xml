@@ -310,6 +310,12 @@
                 <action android:name="android.bluetooth.IBluetoothA2dpSink" />
             </intent-filter>
         </service>
+        <activity android:name=".a2dp.A2dpEnablingActivity"
+                  android:process="@string/process"
+                  android:excludeFromRecents="true"
+                  android:exported="true"
+                  android:theme="@android:style/Theme.Material.Light.Dialog.Alert">
+        </activity>
         <service
             android:process="@string/process"
             android:name=".avrcpcontroller.BluetoothMediaBrowserService"

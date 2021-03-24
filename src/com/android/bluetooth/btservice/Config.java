@@ -115,7 +115,7 @@ public class Config {
 
         ArrayList<Class> profiles = new ArrayList<>(PROFILE_SERVICES_AND_FLAGS.length);
         for (ProfileConfig config : PROFILE_SERVICES_AND_FLAGS) {
-            boolean supported = resources.getBoolean(config.mSupported);
+            boolean supported = config.mClass != A2dpSinkService.class ? resources.getBoolean(config.mSupported): false;
 
             if (!supported && (config.mClass == HearingAidService.class) && FeatureFlagUtils
                                 .isEnabled(ctx, FeatureFlagUtils.HEARING_AID_SETTINGS)) {
