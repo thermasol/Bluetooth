@@ -20,12 +20,15 @@ import android.bluetooth.BluetoothProfile;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.content.res.Resources;
+import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
 import android.provider.Settings;
 import android.util.FeatureFlagUtils;
 import android.util.Log;
 
 import com.android.bluetooth.R;
 import com.android.bluetooth.a2dp.A2dpService;
+import com.android.bluetooth.a2dp.A2dpEnablingActivity;
 import com.android.bluetooth.a2dpsink.A2dpSinkService;
 import com.android.bluetooth.avrcp.AvrcpTargetService;
 import com.android.bluetooth.avrcpcontroller.AvrcpControllerService;
@@ -116,6 +119,18 @@ public class Config {
         ArrayList<Class> profiles = new ArrayList<>(PROFILE_SERVICES_AND_FLAGS.length);
         for (ProfileConfig config : PROFILE_SERVICES_AND_FLAGS) {
             boolean supported = config.mClass != A2dpSinkService.class ? resources.getBoolean(config.mSupported): false;
+            if(config.mClass == A2dpSinkService.class)
+            {
+                SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(ctx);
+                boolean shouldSink = preferences.getBoolean(A2dpEnablingActivity.SINK_EXTRA_NAME, true);
+                if(shouldSink) {
+                    Log.v(TAG, "BT A2dp set to sink");
+                    supported = true;
+                } else {
+                    Log.v(TAG, "BT A2dp set to source");
+                    supported = false;
+                }
+            }
 
             if (!supported && (config.mClass == HearingAidService.class) && FeatureFlagUtils
                                 .isEnabled(ctx, FeatureFlagUtils.HEARING_AID_SETTINGS)) {
