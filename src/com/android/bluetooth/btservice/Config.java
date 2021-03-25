@@ -118,17 +118,18 @@ public class Config {
 
         ArrayList<Class> profiles = new ArrayList<>(PROFILE_SERVICES_AND_FLAGS.length);
         for (ProfileConfig config : PROFILE_SERVICES_AND_FLAGS) {
-            boolean supported = config.mClass != A2dpSinkService.class ? resources.getBoolean(config.mSupported): false;
-            if(config.mClass == A2dpSinkService.class)
+            boolean isA2dp = config.mClass == A2dpService.class || config.mClass == A2dpSinkService.class;
+            boolean supported = isA2dp ? false: resources.getBoolean(config.mSupported);
+            if(isA2dp)
             {
                 SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(ctx);
                 boolean shouldSink = preferences.getBoolean(A2dpEnablingActivity.SINK_EXTRA_NAME, true);
-                if(shouldSink) {
+                if(shouldSink && config.mClass == A2dpSinkService.class) {
                     Log.v(TAG, "BT A2dp set to sink");
                     supported = true;
-                } else {
+                } else if(!shouldSink && config.mClass == A2dpService.class){
                     Log.v(TAG, "BT A2dp set to source");
-                    supported = false;
+                    supported = true;
                 }
             }
 
