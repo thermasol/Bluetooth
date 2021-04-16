@@ -123,7 +123,7 @@ public class Config {
             if(isA2dp)
             {
                 SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(ctx);
-                boolean shouldSink = preferences.getBoolean(A2dpEnablingActivity.SINK_EXTRA_NAME, true);
+                boolean shouldSink = preferences.getBoolean(A2dpEnablingActivity.SINK_EXTRA_NAME, false);
                 if(shouldSink && config.mClass == A2dpSinkService.class) {
                     Log.v(TAG, "BT A2dp set to sink");
                     supported = true;
